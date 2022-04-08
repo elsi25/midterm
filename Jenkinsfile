@@ -9,13 +9,13 @@ pipeline {
                     //This image parameter (of the agent section’s docker parameter) downloads the python:2-alpine
                     //Docker image and runs this image as a separate container. The Python container becomes
                     //the agent that Jenkins uses to run the Build stage of your Pipeline project.
-                    image 'python3:2-alpine'
+                    image 'python:3-alpine'
                 }
             }
             steps {
                 //This sh step runs the Python command to compile your application and
                 //its calc library into byte code files, which are placed into the sources workspace directory
-                sh 'python3 -m py_compile testprograms/sample4.py'
+                sh 'python3 -m py_compile sample4.py'
                 //This stash step saves the Python source code and compiled byte code files from the sources
                 //workspace directory for use in later stages.
                 stash(name: 'compiled-results', includes: '*.py*')
@@ -35,7 +35,7 @@ pipeline {
                 //unit tests (defined in test_sample4.py) on the "calc" library’s add2 function.
                 //The --junit-xml test-reports/results.xml option makes py.test generate a JUnit XML report,
                 //which is saved to test-reports/results.xml
-                sh 'py.test --verbose --junit-xml test-reports/results.xml testprograms/test_sample4.py'
+                sh 'py.test --verbose --junit-xml test-reports/results.xml test_sample4.py'
             }
             post {
                 always {
@@ -74,7 +74,7 @@ pipeline {
                         success {
                             //This archiveArtifacts step archives the standalone executable file and exposes this file
                             //through the Jenkins interface.
-                            archiveArtifacts "${env.BUILD_ID}/dist/sample2"
+                            archiveArtifacts "${env.BUILD_ID}/dist/sample4"
                             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
                         }
                     }
