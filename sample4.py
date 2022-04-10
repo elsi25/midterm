@@ -1,1 +1,1 @@
-print("testing my complie jenkin config")
+prin("testing my complie jenkin config")
